@@ -1,0 +1,30 @@
+Gosporebrust v2.4 恢复测试版
+
+支持：Helldivers 2 Steam build 24826606 / EXE 1.8.45317.0
+依赖：Bingus Shared Loader v15 或更新版本（API 1）
+官方下载：https://github.com/CowboyBingus/BingusSharedLoader/releases/tag/v15
+
+安装：
+1. 完全关闭游戏。
+2. 在 HDArsenal 或 HD2MM 中导入 Gosporebrust-v2.4.zip。
+3. 确认 Bingus Shared Loader v15 或更新版本已经安装并启用。
+4. 启用 Gosporebrust，执行 Purge（清除部署）后重新 Deploy（部署）。
+5. 重新启动游戏。
+
+效果：
+模组读取星球词条定义 1244，并将其对应的“孢裂变种”敌人标签仅加入以下两个星球的终结族任务：
+- 173：盖尔崔亚 / GATRIA
+- 268：富源 / LUXURIANT
+本恢复版保留 1244 词条和 173 动态阵营实验写入，但完全停用任务表复制和 active planet 写入，以恢复 268 的原生任务刷新。它不伪造服务器 selection ID，也不尝试解除不可攻打状态。
+它保留既有星球词条，不修改生成队列、人口计数器或可执行代码。模组不会强行解除星球的战役可攻打状态；如果星球当前不在战役可选范围内，仍需等待游戏原本允许进入任务。
+
+测试建议：
+启动游戏后先确认 268 的任务列表恢复正常；不要用 v2.3 留在运行中的游戏进程测试，必须完全退出游戏后重新启动。173 仍可能无法选择，这是待后续单独研究的入口问题。若目标星球当前不可攻打，记录这一状态，不要据此判断词条写入失败。
+
+日志：
+优先查看 %LOCALAPPDATA%\CowboyBingus\Helldivers2\Logs\Gosporebrust.log。
+若 Loader 未提供共享日志目录，则查看 %LOCALAPPDATA%\Gosporebrust.log。
+日志出现 planet-scope-v2.4-safe-no-task-mutation 与 gosporebrust_applied/gosporebrust_ready 表示词条/阵营数据已写入或已存在；detail 应出现 `task_rows=disabled`。这仍需要先确认 268 任务列表恢复，再进行后续测试。
+
+卸载：
+完全关闭游戏，禁用或删除 Gosporebrust，执行 Purge 后重新部署其余模组。不要在游戏进程仍运行时热卸载。
