@@ -1,6 +1,8 @@
 # Gosporebrust V3
 
-Gosporebrust  为天使投资星球添加了孢裂变种，并且恢复了正常任务列表
+Gosporebrust  为天使投资星球常驻添加了孢裂变种，并且恢复了正常任务列表
+
+GoPredator    为芬里尔III星球常驻添加了掠食变种，并且恢复了正常任务列表
 
 不会对其他星球游玩造成影响
 
