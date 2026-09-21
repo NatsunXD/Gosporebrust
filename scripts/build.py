@@ -1,4 +1,4 @@
-"""Build and inspect the GoPredator v1.2 branch package."""
+"""Build and inspect the GoPredator v1.3 branch package."""
 import json
 import os
 from pathlib import Path
@@ -73,7 +73,7 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '1.2', 'guid': GUID,
+        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '1.3', 'guid': GUID,
         'revision': REVISION,
         'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 3 (Widow's Harbor), unlocks planet selection, and prepares local planet 3 task rows from neutral planet records. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,

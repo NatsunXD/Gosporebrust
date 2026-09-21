@@ -23,6 +23,6 @@ GoPredator 只以星球 3（寡妇港 / WIDOW'S HARBOR）为目标。运行时�
 
 ## 互斥关系与安全边界
 
-GoPredator 使用独立管理器 GUID `eefcedc1-ebd4-4662-91d6-14ed32f8133b`、发现资源 `mods/natsun/gopredator`、实现资源 `mods/natsun/gopredator_impl`、全局状态 `_G.GoPredator` 和 `9ba626afa44a3aa3.patch_1` 归档，可与 Gosporebrust 的 `patch_0` 同时安装、部署并被 Loader 同时发现。两个版本各自写入不同的目标星球。
+GoPredator 使用独立管理器 GUID `eefcedc1-ebd4-4662-91d6-14ed32f8133b`、发现资源 `mods/natsun/gopredator`、实现资源 `mods/natsun/gopredator_impl` 和全局状态 `_G.GoPredator`。归档遵循双方都需要的 `9ba626afa44a3aa3.patch_0` 部署契约；两个版本的真正资源身份不同，因此 Loader 可同时发现，两个版本各自写入不同目标星球。
 
 模组不修改可执行页、反作弊代码、队列索引、队列元素或实时人口计数器，也不调用重建参数的原生任务/生成函数。新构建包在完成精确 ZIP 实机验证前保持 `runtime_verified: false`。

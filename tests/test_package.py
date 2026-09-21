@@ -9,7 +9,7 @@ import zipfile
 
 
 def main():
-    archive_name = '9ba626afa44a3aa3.patch_1'
+    archive_name = '9ba626afa44a3aa3.patch_0'
     package_path = Path(sys.argv[1])
     with zipfile.ZipFile(package_path) as package:
         payloads = {name: package.read(name) for name in package.namelist()}
@@ -22,14 +22,14 @@ def main():
         provenance = json.loads(payloads['GoPredator-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
-        assert manager['Name'] == 'GoPredator - v1.2'
+        assert manager['Name'] == 'GoPredator - v1.3'
         assert manager['Options'] == [{
-            'Name': 'GoPredator - v1.2',
+            'Name': 'GoPredator - v1.3',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
         assert provenance['revision'] == 'planet-scope-go-predator-planet-3'
-        assert provenance['display_version'] == 'v1.2'
+        assert provenance['display_version'] == 'v1.3'
         assert provenance['steam_build'] == 24826606
         assert provenance['exe_version'] == '1.8.45317.0'
         assert provenance['runtime_verified'] is False
@@ -42,7 +42,7 @@ def main():
         assert provenance['loader_integration'] == {
             'minimum_loader_version': 15,
             'api': 1,
-            'archive_name': '9ba626afa44a3aa3.patch_1',
+            'archive_name': '9ba626afa44a3aa3.patch_0',
             'discovery_entry': 'mods/natsun/gopredator',
             'implementation_resource': 'mods/natsun/gopredator_impl',
             'legacy_registry_compatible': True,
@@ -106,6 +106,8 @@ def main():
             lowered = data.lower()
             assert b'users\\' not in lowered and b'users/' not in lowered
             assert all(token not in lowered for token in forbidden)
+        assert b'mods/natsun/gosporebrust' not in payloads['data/' + archive_name]
+        assert b'mods/natsun/gopredator' in payloads['data/' + archive_name]
         with tempfile.TemporaryDirectory() as temporary:
             destination = Path(temporary) / 'Unrelated install location'
             package.extractall(destination)
