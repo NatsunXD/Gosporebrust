@@ -348,7 +348,7 @@ entry_env._G = entry_env
 local entry = assert(loadfile(build .. '/entry.lua'))
 setfenv(entry, entry_env)
 assert(entry() == 'loaded')
-assert(required == 'mods/natsun/gosporebrust_impl' and required_count == 1)
+assert(required == 'mods/natsun/gopredator_impl' and required_count == 1)
 pass('Loader v15 discovery entry forwards exactly once')
 
 print(count .. ' GoPredator checks passed; no executable code, queues or population counters were modified.')

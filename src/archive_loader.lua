@@ -1,7 +1,7 @@
 return function(create_api, patch, build)
-    if _G.Gosporebrust then return end
+    if _G.GoPredator then return end
     local state = {revision = build.revision, active = false, status = '', detail = ''}
-    _G.Gosporebrust = state
+    _G.GoPredator = state
 
     local function report(status, active)
         local detail = patch.detail or ''

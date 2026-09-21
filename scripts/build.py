@@ -1,4 +1,4 @@
-"""Build and inspect the GoPredator v1.1 branch package."""
+"""Build and inspect the GoPredator v1.2 branch package."""
 import json
 import os
 from pathlib import Path
@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / 'build'
 SOURCE = ROOT / 'src'
 TESTS = ROOT / 'tests'
-RESOURCE = 'mods/natsun/gosporebrust'
+RESOURCE = 'mods/natsun/gopredator'
 IMPLEMENTATION_RESOURCE = RESOURCE + '_impl'
 REVISION = 'planet-scope-go-predator-planet-3'
 GUID = 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
@@ -73,7 +73,7 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '1.1', 'guid': GUID,
+        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '1.2', 'guid': GUID,
         'revision': REVISION,
         'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 3 (Widow's Harbor), unlocks planet selection, and prepares local planet 3 task rows from neutral planet records. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
@@ -117,6 +117,7 @@ def main():
         'continuous_update_hook': True, 'shutdown_hook': False,
         'loader_integration': {
             'minimum_loader_version': 15, 'api': 1,
+            'archive_name': ARCHIVE,
             'discovery_entry': RESOURCE, 'implementation_resource': IMPLEMENTATION_RESOURCE,
             'legacy_registry_compatible': True,
         },

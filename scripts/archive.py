@@ -15,7 +15,9 @@ LUA = next((path for path in LUA_CANDIDATES if path and path.is_file()),
            ROOT / 'tools/src/LuaJIT/src/luajit.exe')
 EXE_SHA = 'A09FF52663E73B94FB0CAC0DCB5BA84FFD10ECF44F74A8921AC66AF923988CC3'
 GAME_DLL_SHA = 'CC75948D90FDFDE259DCB519E9933DB7FFA3CCB281CE4FB89E6B1B011557470C'
-ARCHIVE = '9ba626afa44a3aa3.patch_0'
+# GoPredator uses a distinct numeric patch archive so it can be deployed
+# alongside Gosporebrust's patch_0 and discovered in the same startup scan.
+ARCHIVE = '9ba626afa44a3aa3.patch_1'
 TYPE = 0xA14E8DFA2CD117E2
 
 

@@ -4,13 +4,13 @@ GoPredator 是 Gosporebrust 的独立分支版本，只修改 3：寡妇港 / WI
 
 任务模板从当前战役地图中没有特殊星球标签的中立星球读取，明确排除 268，因此不依赖 268 是否可攻打。模组每 0.1 秒检查并补齐 3 的阵营、入口、任务和双标签数据，以应对游戏运行中对表项的刷新。
 
-GoPredator 使用独立的管理器 GUID，可与 Gosporebrust 同时安装；两者仍使用互斥的 Loader 游戏资源身份，测试时只能启用一个。
+GoPredator 使用独立管理器 GUID、独立 Loader 资源名 `mods/natsun/gopredator`、实现资源名 `mods/natsun/gopredator_impl`、全局状态 `_G.GoPredator` 和 `9ba626afa44a3aa3.patch_1` 归档，可与 Gosporebrust 的 `patch_0` 同时安装并被 Loader 同时发现。
 
 ## 安装
 
 1. 关闭游戏。
 2. 安装并启用 [Bingus Shared Loader v15 或更新版本](https://github.com/CowboyBingus/BingusSharedLoader/releases)。
-3. 在 HDArsenal 或 HD2MM 中导入 `GoPredator-v1.1.zip`。
+3. 在 HDArsenal 或 HD2MM 中导入 `GoPredator-v1.2.zip`。
 4. 只启用 GoPredator，Purge 后重新 Deploy，并重启游戏。
 
 本测试包支持 Steam build `24826606`、EXE `1.8.45317.0`。离线测试通过不等于实机验证，精确 ZIP 完成游戏内测试前，`runtime_verified` 保持 `false`。

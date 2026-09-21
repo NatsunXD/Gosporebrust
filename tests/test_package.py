@@ -9,7 +9,7 @@ import zipfile
 
 
 def main():
-    archive_name = '9ba626afa44a3aa3.patch_0'
+    archive_name = '9ba626afa44a3aa3.patch_1'
     package_path = Path(sys.argv[1])
     with zipfile.ZipFile(package_path) as package:
         payloads = {name: package.read(name) for name in package.namelist()}
@@ -22,14 +22,14 @@ def main():
         provenance = json.loads(payloads['GoPredator-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
-        assert manager['Name'] == 'GoPredator - v1.1'
+        assert manager['Name'] == 'GoPredator - v1.2'
         assert manager['Options'] == [{
-            'Name': 'GoPredator - v1.1',
+            'Name': 'GoPredator - v1.2',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
         assert provenance['revision'] == 'planet-scope-go-predator-planet-3'
-        assert provenance['display_version'] == 'v1.1'
+        assert provenance['display_version'] == 'v1.2'
         assert provenance['steam_build'] == 24826606
         assert provenance['exe_version'] == '1.8.45317.0'
         assert provenance['runtime_verified'] is False
@@ -42,8 +42,9 @@ def main():
         assert provenance['loader_integration'] == {
             'minimum_loader_version': 15,
             'api': 1,
-            'discovery_entry': 'mods/natsun/gosporebrust',
-            'implementation_resource': 'mods/natsun/gosporebrust_impl',
+            'archive_name': '9ba626afa44a3aa3.patch_1',
+            'discovery_entry': 'mods/natsun/gopredator',
+            'implementation_resource': 'mods/natsun/gopredator_impl',
             'legacy_registry_compatible': True,
         }
         change = provenance['data_change']
@@ -80,7 +81,7 @@ def main():
         from archive import resource_hash
         archive = payloads['data/' + archive_name]
         assert struct.unpack_from('<III', archive) == (0xF0000011, 1, 2)
-        entry_name = 'mods/natsun/gosporebrust'
+        entry_name = 'mods/natsun/gopredator'
         implementation_name = entry_name + '_impl'
         entries = [struct.unpack_from('<7Q6I', archive, 104 + index * 80) for index in range(2)]
         assert {item[0] for item in entries} == {resource_hash(entry_name), resource_hash(implementation_name)}
