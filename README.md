@@ -4,6 +4,8 @@ Gosporebrust  为天使投资星球常驻添加了孢裂变种，并且恢复了
 
 GoPredator    为芬里尔III星球常驻添加了掠食变种，并且恢复了正常任务列表
 
+两者可以同时启用
+
 不会对其他星球游玩造成影响
 
 ---需要主机客机同时安装---
@@ -15,7 +17,7 @@ GoPredator    为芬里尔III星球常驻添加了掠食变种，并且恢复了
 
 1. 关闭游戏。
 2. 安装并启用原作者的 [Bingus Shared Loader v15 或更新版本](https://github.com/CowboyBingus/BingusSharedLoader/releases) 并设置为最高优先级。
-3. 在 HDArsenal 或 HD2MM 中导入 `Gosporebrust-v3.zip`。
+3. 在 HDArsenal 或 HD2MM 中导入 `Gosporebrust-v3.zip`或/和 `GoPredator-v2.zip`。
 4. 重新部署并重启游戏。
 
 ## 🤝 参与贡献
