@@ -1,11 +1,11 @@
 local ffi
 local patch = {
-    revision = 'planet-scope-go-predator-planet-125',
+    revision = 'planet-scope-go-predator-planet-3',
     task_mutation_enabled = true,
     modifier_definition_ids = {1243, 1245},
     modifier_definition_labels = {'Predator Variant', 'Predator Variant Icon'},
     terminid_faction = 2,
-    target_planets = {125},
+    target_planets = {3},
     tag_count = 31,
     definition_stride = 52,
     definition_count_offset = 53248,
@@ -28,7 +28,7 @@ local patch = {
     planet_dynamic_stride = 304,
     planet_dynamic_offset = 286752,
     dynamic_faction_offset = 36,
-    dynamic_faction_planet = 125,
+    dynamic_faction_planet = 3,
     dynamic_faction_before = 1,
     dynamic_faction_after = 2,
     -- Campaign access fields observed by comparing modifier unlock standby
@@ -50,7 +50,7 @@ local patch = {
     local_row_valid_offset = 52,
     task_source_planet = nil,
     task_source_excluded_planets = {[268] = true},
-    task_target_planet = 125,
+    task_target_planet = 3,
     active_planet_offset = 1548952,
     hovered_planet_offset = 1548956,
 }
@@ -100,17 +100,17 @@ local function dynamic_access_fields(api, game)
     local record = campaign + patch.planet_dynamic_stride * patch.dynamic_faction_planet
         + patch.planet_dynamic_offset
     assert(api.writable_data(record, patch.planet_dynamic_stride),
-        'planet 125 dynamic record is not private writable data')
+        'planet 3 dynamic record is not private writable data')
     local specs = {
         {offset = patch.access_available_offset, before = patch.access_available_before, after = patch.access_available_after},
     }
     local fields = {}
     for _, spec in ipairs(specs) do
         local address = record + spec.offset
-        local bytes = assert(api.read(address, 4), 'planet 125 access field unavailable')
+        local bytes = assert(api.read(address, 4), 'planet 3 access field unavailable')
         local value = u32(bytes, 0)
         local acceptable = value == spec.before or value == spec.after
-        assert(acceptable, 'planet 125 availability field changed')
+        assert(acceptable, 'planet 3 availability field changed')
         fields[#fields + 1] = {address = address, before = bytes, after = pack_u32(spec.after), changed = value ~= spec.after}
     end
     return fields
@@ -129,7 +129,7 @@ local function apply_dynamic_access(api, game)
                         pcall(api.write, prior.address, prior.before)
                     end
                 end
-                error('planet 125 access write readback failed')
+                error('planet 3 access write readback failed')
             end
             applied[#applied + 1] = field
         end
@@ -143,12 +143,12 @@ local function dynamic_faction_field(api, game)
     local record = campaign + patch.planet_dynamic_stride * patch.dynamic_faction_planet
         + patch.planet_dynamic_offset
     assert(api.writable_data(record, patch.planet_dynamic_stride),
-        'planet 125 dynamic record is not private writable data')
+        'planet 3 dynamic record is not private writable data')
     local address = record + patch.dynamic_faction_offset
-    local before = assert(api.read(address, 4), 'planet 125 dynamic faction unavailable')
+    local before = assert(api.read(address, 4), 'planet 3 dynamic faction unavailable')
     local current = u32(before, 0)
     assert(current == patch.dynamic_faction_before or current == patch.dynamic_faction_after,
-        'planet 125 dynamic faction is not the expected original or applied value')
+        'planet 3 dynamic faction is not the expected original or applied value')
     return {address = address, before = before, after = pack_u32(patch.dynamic_faction_after),
         changed = current == patch.dynamic_faction_before, readback = current}
 end
@@ -156,9 +156,9 @@ end
 local function apply_dynamic_faction(api, game)
     local field = dynamic_faction_field(api, game)
     if not field.changed then return field end
-    assert(api.write(field.address, field.after), 'planet 125 dynamic faction write failed')
+    assert(api.write(field.address, field.after), 'planet 3 dynamic faction write failed')
     assert(api.read(field.address, 4) == field.after,
-        'planet 125 dynamic faction write readback failed')
+        'planet 3 dynamic faction write readback failed')
     field.readback = patch.dynamic_faction_after
     return field
 end
@@ -321,7 +321,7 @@ local function ensure_task_rows(api, game)
         else
             index = free_slot()
         end
-        assert(index, 'no free local task row slot for planet 125')
+        assert(index, 'no free local task row slot for planet 3')
         local before = bytes:sub(index * patch.local_row_stride + 1,
             (index + 1) * patch.local_row_stride)
         local after = retarget_task_row(source_row)
@@ -341,7 +341,7 @@ local function ensure_task_rows(api, game)
     end
     if active_field then table.insert(applied, 1, active_field) end
     local suffix = ' :transient' 
-    return applied, string.format('task_rows=copy_%s_to_125:%d%s', source_label, #templates, suffix),
+    return applied, string.format('task_rows=copy_%s_to_3:%d%s', source_label, #templates, suffix),
         #fields > 0 or active_field ~= nil
 end
 
@@ -535,7 +535,7 @@ function patch.apply(api, game)
         local access_ok, access_result, access_written = pcall(apply_dynamic_access, api, game)
         if access_ok then
             access_fields, access_applied = access_result, access_written
-            access_detail = (#access_applied > 0) and 'access_fields=applied:125:+0x30' or 'access_fields=already_applied'
+            access_detail = (#access_applied > 0) and 'access_fields=applied:3:+0x30' or 'access_fields=already_applied'
         else
             access_detail = 'access_fields=skipped:' .. tostring(access_result):gsub('^.-: ', '')
         end
@@ -549,7 +549,7 @@ function patch.apply(api, game)
             task_fields, task_detail, task_changed = {}, 'task_rows=idle', false
         end
         local applied, detail = ensure_all_planets(api, game, owner, tag_ids)
-        patch.detail = string.format('modifiers=1243,1245 tags=%d,%d planets=%s dynamic_faction=125:before=%d:requested=%d:readback=%d %s %s',
+        patch.detail = string.format('modifiers=1243,1245 tags=%d,%d planets=%s dynamic_faction=3:before=%d:requested=%d:readback=%d %s %s',
             tag_ids[1], tag_ids[2], detail, patch.dynamic_faction_before, patch.dynamic_faction_after,
             u32(assert(api.read(dynamic_field.address, 4)), 0), access_detail, task_detail)
         local changed = applied or task_changed or (dynamic_field and dynamic_field.changed) or access_applied and #access_applied > 0

@@ -1,4 +1,4 @@
-GoPredator v1.0 测试版
+GoPredator v1.1 测试版
 
 要求：
 - Helldivers 2 Steam build 24826606 / EXE 1.8.45317.0
@@ -7,22 +7,22 @@ GoPredator v1.0 测试版
 
 安装：
 1. 完全关闭游戏。
-2. 导入 GoPredator-v1.0.zip。
-3. 禁用 Gosporebrust；GoPredator 与它互斥，不能同时启用。
+2. 导入 GoPredator-v1.1.zip。它使用独立管理器 GUID，可与 Gosporebrust 同时安装。
+3. 禁用 Gosporebrust；两个版本不能同时启用。
 4. 启用 GoPredator，执行 Purge 后重新 Deploy。
 5. 启动游戏并进入银河战争地图。
 
 功能：
-- 只将 125 星球的动态阵营改为终结族（2）。
-- 只为 125 写入可点击状态并在选中/悬停时准备本地任务列表。
-- 只为 125 的终结族任务加入定义 1243“掠食变种”和 1245“掠食变种（图标）”。
+- 只将 3：寡妇港 / WIDOW'S HARBOR 的动态阵营改为终结族（2）。
+- 只为 3 写入可点击状态并在选中/悬停时准备本地任务列表。
+- 只为 3 的终结族任务加入定义 1243“掠食变种”和 1245“掠食变种（图标）”。
 - 任务模板来自没有特殊星球标签的中立星球，明确排除 268，不依赖 268 的可攻打状态。
 - 不修改 active planet、selection ID、服务器包、队列或人口计数器。
 
 测试反馈：
 查看 %LOCALAPPDATA%\CowboyBingus\Helldivers2\Logs\GoPredator.log。
 若共享日志目录不可用，则查看 %LOCALAPPDATA%\GoPredator.log。
-请确认 125 可以点击、显示任务、进入任务，并在关卡内观察到掠食变种敌人。
+请确认 3 可以点击、显示任务、进入任务，并在关卡内观察到掠食变种敌人。
 
 卸载：
 完全关闭游戏，禁用或删除 GoPredator，执行 Purge 后重新部署其他模组。不要在游戏进程运行时热卸载。

@@ -32,8 +32,9 @@ local board_storage = ffi.new('uint8_t[?]', math.max(
     1548956 + 4))
 local board = ffi.cast('uint8_t *', board_storage)
 local campaign = board + patch.campaign_offset
-local dynamic125 = campaign + patch.planet_dynamic_stride * patch.dynamic_faction_planet
+local dynamic3 = campaign + patch.planet_dynamic_stride * patch.dynamic_faction_planet
     + patch.planet_dynamic_offset
+local dynamic125 = campaign + patch.planet_dynamic_stride * 125 + patch.planet_dynamic_offset
 local dynamic127 = campaign + patch.planet_dynamic_stride * 127 + patch.planet_dynamic_offset
 local dynamic268 = campaign + patch.planet_dynamic_stride * 268 + patch.planet_dynamic_offset
 local local_rows = board + patch.local_rows_offset
@@ -82,7 +83,7 @@ end
 function api.writable_data(address, size)
     return writable and ((api.distance(address, globals) == 0
         and size == patch.global_rows * patch.global_row_size)
-        or (api.distance(address, dynamic125) == 0 and size == patch.planet_dynamic_stride)
+        or (api.distance(address, dynamic3) == 0 and size == patch.planet_dynamic_stride)
         or (api.distance(address, local_rows) == 0 and size == local_rows_size)
         or (api.distance(address, board + 1548952) == 0 and size == 4)
         or (api.distance(address, board + 1548956) == 0 and size == 4))
@@ -115,12 +116,13 @@ local function reset()
     put_u32(definitions + patch.definition_count_offset, 2)
     put_u32(hashes + 9 * 4, 0xA3A3DB9F)
     put_u32(hashes + 10 * 4, 0xB4B4ECAC)
+    put_u32(dynamic3 + patch.dynamic_faction_offset, patch.dynamic_faction_before)
     put_u32(dynamic125 + patch.dynamic_faction_offset, patch.dynamic_faction_before)
     put_u32(dynamic127 + patch.dynamic_faction_offset, 3)
     put_u32(dynamic268 + patch.dynamic_faction_offset, patch.terminid_faction)
-    put_u32(dynamic125 + patch.access_state_offset, patch.access_state_before)
-    put_u32(dynamic125 + patch.access_timer_offset, patch.access_timer_before)
-    put_u32(dynamic125 + patch.access_available_offset, patch.access_available_before)
+    put_u32(dynamic3 + patch.access_state_offset, patch.access_state_before)
+    put_u32(dynamic3 + patch.access_timer_offset, patch.access_timer_before)
+    put_u32(dynamic3 + patch.access_available_offset, patch.access_available_before)
     writes, fail_write_at, replace_after_write = 0, nil, nil
     owner_present, owner_replaced, writable = true, false, true
 end
@@ -159,14 +161,15 @@ assert(globals[patch.global_entry_type_offset] == patch.modifier_entry_type)
 assert(get_u32(globals + patch.global_entry_tag_offset) == 9)
 assert(get_u32(globals + patch.global_total_offset) == 2)
 assert(get_u32(globals + patch.global_scope_offset) == 0)
-assert(get_u32(globals + patch.global_value_offset) == 125)
+assert(get_u32(globals + patch.global_value_offset) == 3)
 assert(get_u32(globals + patch.global_filter_offset) == patch.terminid_faction)
-assert(get_u32(dynamic125 + patch.dynamic_faction_offset) == patch.dynamic_faction_after)
+assert(get_u32(dynamic3 + patch.dynamic_faction_offset) == patch.dynamic_faction_after)
+assert(get_u32(dynamic125 + patch.dynamic_faction_offset) == patch.dynamic_faction_before)
 assert(get_u32(dynamic127 + patch.dynamic_faction_offset) == 3)
 assert(get_u32(dynamic268 + patch.dynamic_faction_offset) == patch.terminid_faction)
 assert(get_u32(globals + patch.global_total_offset) == 2)
 assert(get_u32(globals + patch.global_entry_stride + patch.global_entry_tag_offset) == 10)
-pass('definitions 1243 and 1245 resolve independently and both apply to planet 125')
+pass('definitions 1243 and 1245 resolve independently and both apply to planet 3')
 
 local applied_writes = writes
 ok, status, active = patch.apply(api, game)
@@ -178,9 +181,10 @@ set_active(268)
 for index = 0, 2 do set_local_row(index, 268, 40 + index) end
 ok, status, active = patch.apply(api, game)
 assert(ok and active and status == 'gopredator_applied')
-assert(get_u32(dynamic125 + patch.dynamic_faction_offset) == 2)
+assert(get_u32(dynamic3 + patch.dynamic_faction_offset) == 2)
+assert(get_u32(dynamic125 + patch.dynamic_faction_offset) == patch.dynamic_faction_before)
 assert(get_u32(dynamic268 + patch.dynamic_faction_offset) == 2)
-pass('only planet 125 dynamic faction changes from 1 to Terminid 2; planet 268 remains 2')
+pass('only planet 3 dynamic faction changes from 1 to Terminid 2; planets 125 and 268 remain unchanged')
 
 reset()
 set_active(268)
@@ -196,7 +200,7 @@ assert(get_u32(board + 1548952) == 268)
 pass('GoPredator leaves planet 268 task rows and active planet untouched')
 
 reset()
-set_active(125)
+set_active(3)
 for index = 0, 2 do set_local_row(index, 42, 60 + index) end
 ok, status, active = patch.apply(api, game)
 assert(ok and active and status == 'gopredator_applied')
@@ -204,45 +208,45 @@ for index = 0, 2 do
     local source_row = local_rows + index * patch.local_row_stride
     local target_row = local_rows + (index + 3) * patch.local_row_stride
     assert(get_u32(source_row + patch.local_row_planet_offset) == 42)
-    assert(get_u32(target_row + patch.local_row_planet_offset) == 125)
+    assert(get_u32(target_row + patch.local_row_planet_offset) == 3)
     assert(target_row[24] == 60 + index)
 end
-assert(patch.detail:find('task_rows=copy_neutral_42_to_125:3', 1, true))
-pass('planet 125 receives task rows from a neutral non-268 template without changing the source')
+assert(patch.detail:find('task_rows=copy_neutral_42_to_3:3', 1, true))
+pass('planet 3 receives task rows from a neutral non-268 template without changing the source')
 
 reset()
-put_u32(dynamic125 + patch.dynamic_faction_offset, patch.dynamic_faction_after)
+put_u32(dynamic3 + patch.dynamic_faction_offset, patch.dynamic_faction_after)
 ok, status, active = patch.apply(api, game)
 assert(ok and active and status == 'gopredator_applied')
-assert(get_u32(dynamic125 + patch.dynamic_faction_offset) == patch.dynamic_faction_after)
+assert(get_u32(dynamic3 + patch.dynamic_faction_offset) == patch.dynamic_faction_after)
 pass('an already-applied dynamic faction is idempotent')
 
 reset()
-put_u32(dynamic125 + patch.dynamic_faction_offset, 3)
+put_u32(dynamic3 + patch.dynamic_faction_offset, 3)
 ok, status, active = patch.apply(api, game)
 assert(ok and not active and status == 'gopredator_waiting' and writes == 0)
-assert(get_u32(dynamic125 + patch.dynamic_faction_offset) == 3)
+assert(get_u32(dynamic3 + patch.dynamic_faction_offset) == 3)
 pass('an unexpected dynamic faction value is never overwritten')
 
 reset()
-set_row(0, 1, 0, 125, patch.terminid_faction)
+set_row(0, 1, 0, 3, patch.terminid_faction)
 set_entry(0, 0, 11)
 ok, status, active = patch.apply(api, game)
 assert(ok and active and get_u32(globals + patch.global_total_offset) == 3)
 assert(get_u32(globals + patch.global_entry_stride + patch.global_entry_tag_offset) == 9)
 assert(get_u32(globals + patch.global_entry_tag_offset) == 11)
 assert(get_u32(globals + 2 * patch.global_entry_stride + patch.global_entry_tag_offset) == 10)
-pass('existing planet 125 rows are extended with both tags without changing entries')
+pass('existing planet 3 rows are extended with both tags without changing entries')
 
 reset()
-set_row(0, 1, 0, 125, 0)
+set_row(0, 1, 0, 3, 0)
 set_entry(0, 0, 11)
 local global_before = ffi.string(globals, patch.global_row_size)
 ok, status, active = patch.apply(api, game)
 assert(ok and active and ffi.string(globals, patch.global_row_size) == global_before)
 local second = globals + patch.global_row_size
 assert(get_u32(second + patch.global_scope_offset) == 0)
-assert(get_u32(second + patch.global_value_offset) == 125)
+assert(get_u32(second + patch.global_value_offset) == 3)
 assert(get_u32(second + patch.global_filter_offset) == patch.terminid_faction)
 assert(get_u32(second + patch.global_entry_tag_offset) == 9)
 assert(get_u32(second + patch.global_total_offset) == 2)
@@ -250,25 +254,25 @@ assert(get_u32(second + patch.global_entry_stride + patch.global_entry_tag_offse
 pass('an unfiltered planet row is never broadened; filtered target rows are created separately')
 
 reset()
-set_row(0, patch.max_entries, 0, 125, patch.terminid_faction)
+set_row(0, patch.max_entries, 0, 3, patch.terminid_faction)
 for slot = 0, patch.max_entries - 1 do set_entry(0, slot, slot + 1) end
 ok, status, active = patch.apply(api, game)
 second = globals + patch.global_row_size
 assert(ok and active and get_u32(globals + patch.global_total_offset) == patch.max_entries)
 assert(get_u32(second + patch.global_total_offset) == 2 and get_u32(second + patch.global_entry_tag_offset) == 9)
 assert(get_u32(second + patch.global_entry_stride + patch.global_entry_tag_offset) == 10)
-assert(get_u32(second + patch.global_value_offset) == 125 and get_u32(second + patch.global_filter_offset) == patch.terminid_faction)
+assert(get_u32(second + patch.global_value_offset) == 3 and get_u32(second + patch.global_filter_offset) == patch.terminid_faction)
 pass('a full target row falls back to a new row for that planet')
 
 reset()
-set_row(0, 1, 0, 125, 0)
+set_row(0, 1, 0, 3, 0)
 set_entry(0, 0, 9)
 set_row(1, 1, 0, 268, patch.terminid_faction)
 set_entry(1, 0, 9)
 ok, status, active = patch.apply(api, game)
 assert(ok and active and status == 'gopredator_applied' and writes >= 1
-    and get_u32(dynamic125 + patch.dynamic_faction_offset) == patch.dynamic_faction_after)
-pass('already effective target tags are detected while the 125 faction experiment applies once')
+    and get_u32(dynamic3 + patch.dynamic_faction_offset) == patch.dynamic_faction_after)
+pass('already effective target tags are detected while the planet 3 faction experiment applies once')
 
 reset()
 set_row(0, 1, 2, patch.terminid_faction, 0)
