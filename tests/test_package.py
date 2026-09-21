@@ -22,14 +22,14 @@ def main():
         provenance = json.loads(payloads['GoPredator-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
-        assert manager['Name'] == 'GoPredator - v1.3'
+        assert manager['Name'] == 'GoPredator - v2.0'
         assert manager['Options'] == [{
-            'Name': 'GoPredator - v1.3',
+            'Name': 'GoPredator - v2.0',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
-        assert provenance['revision'] == 'planet-scope-go-predator-planet-3'
-        assert provenance['display_version'] == 'v1.3'
+        assert provenance['revision'] == 'planet-scope-go-predator-planet-125-v2'
+        assert provenance['display_version'] == 'v2.0'
         assert provenance['steam_build'] == 24826606
         assert provenance['exe_version'] == '1.8.45317.0'
         assert provenance['runtime_verified'] is False
@@ -52,24 +52,24 @@ def main():
         assert change['resolved_tag_ids'] == 'runtime'
         assert change['terminid_faction'] == 2
         assert change['global_scope'] == 0
-        assert change['target_planets'] == [3]
-        assert change['planet_names'] == {'3': "Widow's Harbor"}
+        assert change['target_planets'] == [125]
+        assert change['planet_names'] == {'125': 'Fenrir III'}
         assert change['filter_faction'] == 2
         assert change['executable_code_writes'] == 0
         assert change['queue_or_population_counter_writes'] is False
         assert change['planet_availability_mutation'] is True
         assert change['task_entry_mutation'] is True
         assert change['active_planet_mutation'] is False
-        assert change['active_planet_trigger'] == 'active_or_hovered_planet_3'
+        assert change['active_planet_trigger'] == 'active_or_hovered_planet_125'
         assert change['task_entry_copy']['template_policy'] == 'neutral_planet_only_excludes_268'
         assert change['task_entry_copy'] == {
-            'source_planet': None, 'target_planet': 3, 'table_offset': 1012352,
+            'source_planet': None, 'target_planet': 125, 'table_offset': 1012352,
             'row_stride': 92, 'planet_field_offset': 16, 'valid_field_offset': 52,
             'operation_field_offset': 24,
             'template_policy': 'neutral_planet_only_excludes_268',
         }
         assert change['dynamic_faction_mutation'] == {
-            'planet': 3, 'before': 1, 'after': 2,
+            'planet': 125, 'before': 1, 'after': 2,
             'board_pointer_rva': '0x277FF28', 'campaign_offset': 1053752,
             'record_stride': 304, 'record_offset': 286752, 'field_offset': 36,
             'scope': 'planet dynamic record only',
