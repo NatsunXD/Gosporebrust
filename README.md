@@ -1,39 +1,18 @@
-# Gosporebrust V3
+# GoPredator
 
-Gosporebrust  为天使投资星球添加了孢裂变种，并且恢复了正常任务列表
+GoPredator 是 Gosporebrust 的互斥分支版本，只修改 125 星球：开放星球点击与本地任务列表，并为终结族任务添加定义 `1243`“掠食变种”和 `1245`“掠食变种（图标）”两个星球标签。
 
-不会对其他星球游玩造成影响
+任务模板从当前战役地图中没有特殊星球标签的中立星球读取，明确排除 268，因此不依赖 268 是否可攻打。模组每 0.1 秒检查并补齐 125 的阵营、入口、任务和双标签数据，以应对游戏运行中对表项的刷新。
 
----需要主机客机同时安装---
+GoPredator 与 Gosporebrust 使用相同的 Loader 资源身份和管理器 GUID，二者只能启用一个。
 
-孢裂变种，于铁腕镇压版本中解锁，作为东线一只平平无奇的变种，其机制简单，出现频率较低，变种弱点明显；与掠食的高移速与高伤害，爆裂的钻地跟踪对比，孢裂甚至削弱了唯一重甲吐酸泰坦的吐酸伤害，从这种情况来看，孢裂变种实在算不上是相当强力的终结族变种😋
-
-
-### 安装
+## 安装
 
 1. 关闭游戏。
-2. 安装并启用原作者的 [Bingus Shared Loader v15 或更新版本](https://github.com/CowboyBingus/BingusSharedLoader/releases) 并设置为最高优先级。
-3. 在 HDArsenal 或 HD2MM 中导入 `Gosporebrust-v3.zip`。
-4. 重新部署并重启游戏。
+2. 安装并启用 [Bingus Shared Loader v15 或更新版本](https://github.com/CowboyBingus/BingusSharedLoader/releases)。
+3. 在 HDArsenal 或 HD2MM 中导入 `GoPredator-v1.0.zip`。
+4. 只启用 GoPredator，Purge 后重新 Deploy，并重启游戏。
 
-## 🤝 参与贡献
-
-欢迎任何形式的贡献！以下是标准贡献流程：
-
-1. **Fork 仓库** - 点击右上角 Fork 按钮创建您的副本
-2. **创建分支** - 基于开发分支创建特性分支：
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. **提交修改** - 编写清晰的提交信息：
-   ```bash
-   git commit -m "feat: 添加新功能" -m "详细描述..."
-   ```
-4. **推送更改** - 将分支推送到您的远程仓库：
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. **发起 PR** - 在 GitHub 上创建 Pull Request 到原仓库的 `main` 分支
-   
+本测试包支持 Steam build `24826606`、EXE `1.8.45317.0`。离线测试通过不等于实机验证，精确 ZIP 完成游戏内测试前，`runtime_verified` 保持 `false`。
 
 详见 [安装与卸载](INSTALL.txt)、[技术说明](docs/TECHNICAL.md) 和 [测试清单](docs/TESTING.md)。

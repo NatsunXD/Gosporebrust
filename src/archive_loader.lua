@@ -7,15 +7,15 @@ return function(create_api, patch, build)
         local detail = patch.detail or ''
         if state.status == status and state.detail == detail and state.active == active then return end
         state.active, state.status, state.detail = active, status, detail
-        print('[Gosporebrust] ' .. build.revision .. ': ' .. status ..
+        print('[GoPredator] ' .. build.revision .. ': ' .. status ..
             (detail ~= '' and (' ' .. detail) or ''))
         pcall(function()
             local loader = rawget(_G, 'CowboyBingusModLoader')
             local file = loader and type(loader.open_log) == 'function'
-                and loader.open_log('Gosporebrust.log') or nil
+                and loader.open_log('GoPredator.log') or nil
             if not file then
                 local directory = os.getenv('LOCALAPPDATA')
-                if directory then file = io.open(directory .. '/Gosporebrust.log', 'w') end
+                if directory then file = io.open(directory .. '/GoPredator.log', 'w') end
             end
             if file then
                 file:write(build.revision .. '\n' .. status .. '\n' .. detail .. '\n')
