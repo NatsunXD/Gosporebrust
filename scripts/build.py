@@ -18,7 +18,7 @@ SOURCE = ROOT / 'src'
 TESTS = ROOT / 'tests'
 RESOURCE = 'mods/natsun/gopredator'
 IMPLEMENTATION_RESOURCE = RESOURCE + '_impl'
-REVISION = 'planet-scope-go-predator-planet-125-v2'
+REVISION = 'planet-scope-go-predator-planet-125-v2.1'
 GUID = 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
 
 
@@ -73,17 +73,17 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '2.0', 'guid': GUID,
+        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '2.1', 'guid': GUID,
         'revision': REVISION,
-        'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from neutral planet records. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
+        'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from neutral planet records. Built for Helldivers 2 1.8.45850.0. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
         'deployment_files': files,
         'files': {path: sha((ROOT / path).read_bytes()) for path in files.values()},
         'data_change': {
             'modifier_definition_ids': [1243, 1245], 'resolved_tag_ids': 'runtime',
             'optional_icon_definition': 1245,
-            'campaign_tag_hash_rva': '0x1F38C90', 'modifier_definitions_rva': '0x277FDD0',
-            'global_modifier_table_rva': '0x2770628', 'global_row_size': 356,
+            'campaign_tag_hash_rva': '0x21E18E0', 'modifier_definitions_rva': '0x347CD98',
+            'global_modifier_table_rva': '0x346D518', 'global_row_size': 356,
             'global_row_count': 32, 'global_scope': 0, 'target_planets': [125],
             'planet_names': {'125': 'Fenrir III'},
             'filter_faction': 2, 'terminid_faction': 2,
@@ -110,7 +110,7 @@ def main():
             },
             'dynamic_faction_mutation': {
                 'planet': 125, 'before': 1, 'after': 2,
-                'board_pointer_rva': '0x277FF28', 'campaign_offset': 1053752,
+                'board_pointer_rva': '0x347CEE8', 'campaign_offset': 1053752,
                 'record_stride': 304, 'record_offset': 286752, 'field_offset': 36,
                 'scope': 'planet dynamic record only',
             },

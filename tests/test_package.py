@@ -22,16 +22,16 @@ def main():
         provenance = json.loads(payloads['GoPredator-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
-        assert manager['Name'] == 'GoPredator - v2.0'
+        assert manager['Name'] == 'GoPredator - v2.1'
         assert manager['Options'] == [{
-            'Name': 'GoPredator - v2.0',
+            'Name': 'GoPredator - v2.1',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
-        assert provenance['revision'] == 'planet-scope-go-predator-planet-125-v2'
-        assert provenance['display_version'] == 'v2.0'
-        assert provenance['steam_build'] == 24826606
-        assert provenance['exe_version'] == '1.8.45317.0'
+        assert provenance['revision'] == 'planet-scope-go-predator-planet-125-v2.1'
+        assert provenance['display_version'] == 'v2.1'
+        assert provenance['steam_build'] == 25327279
+        assert provenance['exe_version'] == '1.8.45850.0'
         assert provenance['runtime_verified'] is False
         assert provenance['requires'] == [{
             'name': 'Bingus Shared Loader',
@@ -70,7 +70,7 @@ def main():
         }
         assert change['dynamic_faction_mutation'] == {
             'planet': 125, 'before': 1, 'after': 2,
-            'board_pointer_rva': '0x277FF28', 'campaign_offset': 1053752,
+            'board_pointer_rva': '0x347CEE8', 'campaign_offset': 1053752,
             'record_stride': 304, 'record_offset': 286752, 'field_offset': 36,
             'scope': 'planet dynamic record only',
         }

@@ -1,17 +1,17 @@
 local ffi
 local patch = {
-    revision = 'planet-scope-go-predator-planet-125-v2',
+    revision = 'planet-scope-go-predator-planet-125-v2.1',
     task_mutation_enabled = true,
     modifier_definition_ids = {1243, 1245},
     modifier_definition_labels = {'Predator Variant', 'Predator Variant Icon'},
     terminid_faction = 2,
     target_planets = {125},
-    tag_count = 31,
+    tag_count = 32,
     definition_stride = 52,
     definition_count_offset = 53248,
-    definition_pointer_rva = 0x277fdd0,
-    tag_hashes_rva = 0x1f38c90,
-    globals_pointer_rva = 0x2770628,
+    definition_pointer_rva = 0x347cd98,
+    tag_hashes_rva = 0x21e18e0,
+    globals_pointer_rva = 0x346d518,
     global_rows = 32,
     global_row_size = 356,
     global_total_offset = 80,
@@ -23,7 +23,7 @@ local patch = {
     global_entry_tag_offset = 4,
     max_entries = 5,
     modifier_entry_type = 17,
-    board_pointer_rva = 0x277ff28,
+    board_pointer_rva = 0x347cee8,
     campaign_offset = 1053752,
     planet_dynamic_stride = 304,
     planet_dynamic_offset = 286752,
@@ -93,6 +93,11 @@ end
 
 local function same_pointer(api, first, second)
     return first and second and api.distance(first, second) == 0
+end
+
+local function hex_address(value)
+    ensure_ffi()
+    return string.format('0x%X', tonumber(ffi.cast('uintptr_t', value)))
 end
 
 local function dynamic_access_fields(api, game)
@@ -559,8 +564,9 @@ function patch.apply(api, game)
                 'task_rows=idle:active=%d:hovered=%d:selected=%d', active_now, hovered_now, selected_now), false
         end
         local applied, detail = ensure_all_planets(api, game, owner, tag_ids)
-        patch.detail = string.format('modifiers=1243,1245 tags=%d,%d planets=%s dynamic_faction=125:before=%d:requested=%d:readback=%d %s %s',
-            tag_ids[1], tag_ids[2], detail, patch.dynamic_faction_before, patch.dynamic_faction_after,
+        patch.detail = string.format('modifiers=1243,1245 tags=%d,%d owner=%s board=%s planets=%s dynamic_faction=125:before=%d:requested=%d:readback=%d %s %s',
+            tag_ids[1], tag_ids[2], hex_address(owner), hex_address(board_now), detail,
+            patch.dynamic_faction_before, patch.dynamic_faction_after,
             u32(assert(api.read(dynamic_field.address, 4)), 0), access_detail, task_detail)
         local changed = applied or task_changed or (dynamic_field and dynamic_field.changed) or access_applied and #access_applied > 0
         return true, changed and 'gopredator_applied' or 'gopredator_ready', true
