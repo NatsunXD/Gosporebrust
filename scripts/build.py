@@ -18,7 +18,7 @@ SOURCE = ROOT / 'src'
 TESTS = ROOT / 'tests'
 RESOURCE = 'mods/natsun/gosporebrust'
 IMPLEMENTATION_RESOURCE = RESOURCE + '_impl'
-REVISION = 'planet-scope-v3-planet-127-only'
+REVISION = 'planet-scope-v4-planet-127-only'
 GUID = '9f9ebd1d-bd31-4a8d-89f7-4d7f1b7e4f24'
 
 
@@ -73,16 +73,16 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'Gosporebrust', 'slug': 'Gosporebrust', 'version': '3.0', 'guid': GUID,
+        'name': 'Gosporebrust', 'slug': 'Gosporebrust', 'version': '4.0', 'guid': GUID,
         'revision': REVISION,
-        'description': 'Adds the Spore Burst enemy modifier (planet entry 1244) only to Terminid missions on planet 127, removes modifier 1241 from planet 127, and prepares local 127 task rows from neutral planet records. Requires Bingus Shared Loader v15 or newer.',
+        'description': 'Adds the Spore Burst enemy modifier (planet entry 1244) only to Terminid missions on planet 127, removes modifier 1241 from planet 127, and prepares local 127 task rows from neutral planet records. Built for Helldivers 2 1.8.45850.0. Requires Bingus Shared Loader v15 or newer.',
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
         'deployment_files': files,
         'files': {path: sha((ROOT / path).read_bytes()) for path in files.values()},
         'data_change': {
-            'modifier_definition_id': 1244, 'resolved_tag_id': 9,
-            'campaign_tag_hash_rva': '0x1F38C90', 'modifier_definitions_rva': '0x277FDD0',
-            'global_modifier_table_rva': '0x2770628', 'global_row_size': 356,
+            'modifier_definition_id': 1244, 'resolved_tag_id': 10,
+            'campaign_tag_hash_rva': '0x21E18E0', 'modifier_definitions_rva': '0x347CD98',
+            'global_modifier_table_rva': '0x346D518', 'global_row_size': 356,
             'global_row_count': 32, 'global_scope': 0, 'target_planets': [127],
             'planet_names': {'127': '127'},
             'filter_faction': 2, 'terminid_faction': 2,
@@ -91,7 +91,7 @@ def main():
             'idempotent': True, 'executable_code_writes': 0,
             'queue_or_population_counter_writes': False, 'runtime_verified': False,
             'planet_availability_mutation': True,
-            'planet_availability_scope': 'planet 173 dynamic record access fields only',
+            'planet_availability_scope': 'planet 127 dynamic record access fields only',
             'task_entry_mutation': False,
             'active_planet_mutation': False,
             'active_planet_trigger': None,
@@ -103,14 +103,14 @@ def main():
                 'template_policy': 'neutral_planet_only_excludes_268',
             },
             'dynamic_access_mutation': {
-                'planet': 173, 'state_offset': 28, 'state_before': 17, 'state_intermediate': 9, 'state_after': 5,
+                'planet': 127, 'state_offset': 28, 'state_before': 17, 'state_intermediate': 9, 'state_after': 5,
                 'timer_offset': 44, 'timer_before_u32': 1077004060, 'timer_after_u32': 0,
                 'available_offset': 48, 'available_before': 0, 'available_after': 1,
                 'evidence': 'research/planet-dynamic-A2-clean-raw.json vs planet-dynamic-B3-raw.json',
             },
             'dynamic_faction_mutation': {
-                'planet': 173, 'before': 1, 'after': 2,
-                'board_pointer_rva': '0x277FF28', 'campaign_offset': 1053752,
+                'planet': 127, 'before': 1, 'after': 2,
+                'board_pointer_rva': '0x347CEE8', 'campaign_offset': 1053752,
                 'record_stride': 304, 'record_offset': 286752, 'field_offset': 36,
                 'scope': 'planet dynamic record only',
             },

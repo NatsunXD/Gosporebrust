@@ -22,16 +22,16 @@ def main():
         provenance = json.loads(payloads['Gosporebrust-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == '9f9ebd1d-bd31-4a8d-89f7-4d7f1b7e4f24'
-        assert manager['Name'] == 'Gosporebrust - v3.0'
+        assert manager['Name'] == 'Gosporebrust - v4.0'
         assert manager['Options'] == [{
-            'Name': 'Gosporebrust - v3.0',
+            'Name': 'Gosporebrust - v4.0',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
-        assert provenance['revision'] == 'planet-scope-v3-planet-127-only'
-        assert provenance['display_version'] == 'v3.0'
-        assert provenance['steam_build'] == 24826606
-        assert provenance['exe_version'] == '1.8.45317.0'
+        assert provenance['revision'] == 'planet-scope-v4-planet-127-only'
+        assert provenance['display_version'] == 'v4.0'
+        assert provenance['steam_build'] == 25327279
+        assert provenance['exe_version'] == '1.8.45850.0'
         assert provenance['runtime_verified'] is False
         assert provenance['requires'] == [{
             'name': 'Bingus Shared Loader',
@@ -48,7 +48,7 @@ def main():
         }
         change = provenance['data_change']
         assert change['modifier_definition_id'] == 1244
-        assert change['resolved_tag_id'] == 9
+        assert change['resolved_tag_id'] == 10
         assert change['terminid_faction'] == 2
         assert change['global_scope'] == 0
         assert change['target_planets'] == [127]
@@ -68,8 +68,8 @@ def main():
             'template_policy': 'neutral_planet_only_excludes_268',
         }
         assert change['dynamic_faction_mutation'] == {
-            'planet': 173, 'before': 1, 'after': 2,
-            'board_pointer_rva': '0x277FF28', 'campaign_offset': 1053752,
+            'planet': 127, 'before': 1, 'after': 2,
+            'board_pointer_rva': '0x347CEE8', 'campaign_offset': 1053752,
             'record_stride': 304, 'record_offset': 286752, 'field_offset': 36,
             'scope': 'planet dynamic record only',
         }
