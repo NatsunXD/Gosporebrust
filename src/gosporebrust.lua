@@ -1,6 +1,6 @@
 local ffi
 local patch = {
-    revision = 'planet-scope-go-predator-planet-125-v2.1',
+    revision = 'planet-scope-go-predator-planet-125-v3',
     task_mutation_enabled = true,
     modifier_definition_ids = {1243, 1245},
     modifier_definition_labels = {'Predator Variant', 'Predator Variant Icon'},

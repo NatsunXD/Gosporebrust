@@ -22,14 +22,14 @@ def main():
         provenance = json.loads(payloads['GoPredator-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
-        assert manager['Name'] == 'GoPredator - v2.1'
+        assert manager['Name'] == 'GoPredator - v3.0'
         assert manager['Options'] == [{
-            'Name': 'GoPredator - v2.1',
+            'Name': 'GoPredator - v3.0',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
-        assert provenance['revision'] == 'planet-scope-go-predator-planet-125-v2.1'
-        assert provenance['display_version'] == 'v2.1'
+        assert provenance['revision'] == 'planet-scope-go-predator-planet-125-v3'
+        assert provenance['display_version'] == 'v3.0'
         assert provenance['steam_build'] == 25327279
         assert provenance['exe_version'] == '1.8.45850.0'
         assert provenance['runtime_verified'] is False

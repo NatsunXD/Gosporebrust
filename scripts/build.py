@@ -18,7 +18,7 @@ SOURCE = ROOT / 'src'
 TESTS = ROOT / 'tests'
 RESOURCE = 'mods/natsun/gopredator'
 IMPLEMENTATION_RESOURCE = RESOURCE + '_impl'
-REVISION = 'planet-scope-go-predator-planet-125-v2.1'
+REVISION = 'planet-scope-go-predator-planet-125-v3'
 GUID = 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
 
 
@@ -73,7 +73,7 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '2.1', 'guid': GUID,
+        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '3.0', 'guid': GUID,
         'revision': REVISION,
         'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from neutral planet records. Built for Helldivers 2 1.8.45850.0. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
