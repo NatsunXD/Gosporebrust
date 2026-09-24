@@ -25,3 +25,9 @@
 6. 检查 127、268 和至少一个普通星球，确认其入口、任务和标签未被改变。
 
 精确测试包完成以上实机检查前，`runtime_verified` 保持 `false`。若失败，请提供 `GoPredator.log` 以及失败发生在点击星球、显示任务、选择任务还是进入关卡阶段。
+
+## Hash-mismatch diagnostic
+
+A module hash mismatch must produce `identity=warning` in GoPredator.log and must
+not stop the patch by itself.  A genuinely incompatible build must instead fail
+structural checks and report `gopredator_waiting`.
