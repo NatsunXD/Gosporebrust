@@ -29,3 +29,9 @@
 8. 正常退出游戏，确认关卡切换、撤离和关闭阶段无崩溃。
 
 实机通过前，包内 `runtime_verified` 必须保持 `false`。如果日志显示 `gosporebrust_waiting`，请提供 `Gosporebrust.log`；如果显示 `gosporebrust_applied` 或 `gosporebrust_ready` 但敌人池未变化，请同时提供任务星球、难度、是否主机及关卡内观察结果。
+
+## Hash-mismatch diagnostic
+
+A module hash mismatch must produce `identity=warning` in Gosporebrust.log and must
+not stop the patch by itself.  A genuinely incompatible build must instead fail
+structural checks and report `gosporebrust_waiting`.
