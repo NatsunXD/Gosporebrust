@@ -125,6 +125,7 @@ local function reset()
     put_u32(dynamic3 + patch.access_available_offset, patch.access_available_before)
     writes, fail_write_at, replace_after_write = 0, nil, nil
     owner_present, owner_replaced, writable = true, false, true
+    patch.reset_task_cache()
 end
 
 local function set_active(planet)
@@ -199,18 +200,35 @@ pass('GoPredator leaves planet 268 task rows and active planet untouched')
 
 reset()
 set_active(125)
-for index = 0, 2 do set_local_row(index, 42, 60 + index) end
+set_local_row(0, 269, 61)
+set_local_row(1, 270, 62)
+set_local_row(2, 271, 63)
+put_u32(campaign + patch.planet_dynamic_stride * 269 + patch.planet_dynamic_offset
+    + patch.dynamic_faction_offset, 1)
+put_u32(campaign + patch.planet_dynamic_stride * 270 + patch.planet_dynamic_offset
+    + patch.dynamic_faction_offset, patch.terminid_faction)
+put_u32(campaign + patch.planet_dynamic_stride * 271 + patch.planet_dynamic_offset
+    + patch.dynamic_faction_offset, patch.terminid_faction)
 ok, status, active = patch.apply(api, game)
 assert(ok and active and status == 'gopredator_applied')
+local target_row = local_rows + 3 * patch.local_row_stride
+assert(get_u32(target_row + patch.local_row_planet_offset) == 125)
+assert(target_row[24] == 62)
+assert(patch.detail:find('task_rows=copy_terminid_270_to_125:1', 1, true))
 for index = 0, 2 do
-    local source_row = local_rows + index * patch.local_row_stride
-    local target_row = local_rows + (index + 3) * patch.local_row_stride
-    assert(get_u32(source_row + patch.local_row_planet_offset) == 42)
-    assert(get_u32(target_row + patch.local_row_planet_offset) == 125)
-    assert(target_row[24] == 60 + index)
+    assert(get_u32(local_rows + index * patch.local_row_stride + patch.local_row_planet_offset) ~= 125)
 end
-assert(patch.detail:find('task_rows=copy_neutral_42_to_125', 1, true))
-pass('planet 125 receives task rows from a neutral non-268 template without changing the source')
+pass('planet 125 receives task rows from the minimum visible Terminid source')
+
+reset()
+set_active(125)
+set_local_row(0, 269, 61)
+put_u32(campaign + patch.planet_dynamic_stride * 269 + patch.planet_dynamic_offset
+    + patch.dynamic_faction_offset, 1)
+ok, status, active = patch.apply(api, game)
+assert(ok and active and patch.detail:find('task_rows=no_terminid_template', 1, true))
+assert(get_u32(local_rows + patch.local_row_planet_offset) == 269)
+pass('a non-Terminid source is never copied to planet 125')
 
 reset()
 put_u32(dynamic3 + patch.dynamic_faction_offset, patch.dynamic_faction_after)

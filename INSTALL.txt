@@ -1,13 +1,13 @@
-GoPredator v1.3 测试版
+GoPredator v5.0-preview 测试版
 
 要求：
-- Helldivers 2 Steam build 24826606 / EXE 1.8.45317.0
+- Helldivers 2 Steam build 25480438 / EXE 1.8.46015.0
 - Bingus Shared Loader v15 或更新版本
 - HDArsenal 或 HD2MM
 
 安装：
 1. 完全关闭游戏。
-2. 导入 GoPredator-v1.3.zip。它使用独立管理器 GUID、`mods/natsun/gopredator` 资源名和独立的归档内部资源身份，可与 Gosporebrust 同时安装、部署。
+2. 导入 GoPredator-v5.0-preview.zip。它使用独立管理器 GUID、`mods/natsun/gopredator` 资源名和独立的归档内部资源身份，可与 Gosporebrust 同时安装、部署。
 3. 两个版本可以同时加载；若只想测试其中一个，再在管理器中单独禁用另一个。
 4. 启用 GoPredator，执行 Purge 后重新 Deploy。
 5. 启动游戏并进入银河战争地图。

@@ -1,6 +1,6 @@
 local ffi
 local patch = {
-    revision = 'planet-scope-go-predator-planet-125-v3',
+    revision = 'planet-scope-gopredator-v5-preview-46015-dynamic-terminid-source',
     task_mutation_enabled = true,
     modifier_definition_ids = {1243, 1245},
     modifier_definition_labels = {'Predator Variant', 'Predator Variant Icon'},
@@ -49,7 +49,7 @@ local patch = {
     local_row_planet_offset = 16,
     local_row_valid_offset = 52,
     task_source_planet = nil,
-    task_source_excluded_planets = {[268] = true, [125] = true},
+    task_source_excluded_planets = {[125] = true},
     task_target_planet = 125,
     active_planet_offset = 1548952,
     hovered_planet_offset = 1548956,
@@ -224,10 +224,28 @@ local function apply_task_fields(api, game, board, fields)
     return applied
 end
 
+local function candidate_source_planets(api, game, groups)
+    local board = ptr(api, game + patch.board_pointer_rva)
+    local campaign = board + patch.campaign_offset
+    local candidates = {}
+    for planet in pairs(groups) do
+        if planet ~= patch.task_target_planet
+            and not (patch.task_source_excluded_planets or {})[planet] then
+            local record = campaign + patch.planet_dynamic_stride * planet
+                + patch.planet_dynamic_offset
+            local bytes = api.read(record + patch.dynamic_faction_offset, 4)
+            local faction = bytes and u32(bytes, 0)
+            if faction == patch.terminid_faction then
+                candidates[#candidates + 1] = planet
+            end
+        end
+    end
+    table.sort(candidates)
+    return candidates
+end
+
 local function capture_task_cache(api, game, board, active)
     if task_cache.owner and not same_pointer(api, board, task_cache.owner) then
-        -- Row bytes are portable templates. Keep them across campaign-board
-        -- replacement; only the old owner pointer must be discarded.
         task_cache.owner, task_cache.slots = nil, nil
     end
     local base = board + patch.local_rows_offset
@@ -235,40 +253,25 @@ local function capture_task_cache(api, game, board, active)
     if not api.writable_data(base, size) then return end
     local bytes = assert(api.read(base, size), 'local campaign task rows unavailable')
 
-    local excluded = {[patch.task_target_planet] = true}
-    for planet in pairs(patch.task_source_excluded_planets or {}) do
-        excluded[planet] = true
-    end
-    -- Keep the source independent from the target and the other variant. The
-    -- local row itself is the authoritative task template; global modifier
-    -- rows can describe ordinary planet filters and must not eliminate every
-    -- available source before the target has a task list.
-
-    local groups, order = {}, {}
+    local groups = {}
     for index = 0, patch.local_rows_capacity - 1 do
         local row = bytes:sub(index * patch.local_row_stride + 1,
             (index + 1) * patch.local_row_stride)
         if task_row_valid(row) then
             local planet = task_row_planet(row)
-            if planet and not excluded[planet] then
-                if not groups[planet] then groups[planet], order[#order + 1] = {}, planet end
+            if planet and planet ~= patch.task_target_planet then
+                if not groups[planet] then groups[planet] = {} end
                 groups[planet][#groups[planet] + 1] = row
             end
         end
     end
 
-    local source = patch.task_source_planet and groups[patch.task_source_planet]
-        and patch.task_source_planet or nil
-    if not source and not task_cache.rows then
-        for _, planet in ipairs(order) do
-            if planet ~= patch.task_target_planet and not excluded[planet] then
-                source = planet
-                break
-            end
-        end
-    end
-    if source and #groups[source] > 0 then
-        task_cache.rows, task_cache.owner, task_cache.source_planet = groups[source], board, source
+    local candidates = candidate_source_planets(api, game, groups)
+    if #candidates == 0 then return end
+    local source = candidates[1]
+    if #groups[source] > 0 then
+        task_cache.rows, task_cache.owner = groups[source], board
+        task_cache.source_planet, task_cache.candidates = source, candidates
     end
 end
 
@@ -290,9 +293,9 @@ local function ensure_task_rows(api, game)
         end
     end
     local templates = task_cache.rows
-    local source_label = task_cache.source_planet and ('neutral_' .. tostring(task_cache.source_planet)) or 'neutral'
+    local source_label = task_cache.source_planet and ('terminid_' .. tostring(task_cache.source_planet)) or 'terminid'
     if not templates or #templates == 0 then
-        return {}, 'task_rows=no_neutral_template', false
+        return {}, 'task_rows=no_terminid_template', false
     end
     if not task_cache.rows then task_cache.rows = templates end
     local active_field
@@ -523,6 +526,10 @@ local function ensure_all_planets(api, game, owner, tag_ids)
     end
     if #fields > 0 then assert(apply_fields(api, game, owner, fields)) end
     return #fields > 0, table.concat(actions, ',')
+end
+
+function patch.reset_task_cache()
+    task_cache = {rows = nil, slots = nil, owner = nil, applied = nil}
 end
 
 function patch.apply(api, game)

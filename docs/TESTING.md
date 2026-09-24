@@ -15,7 +15,7 @@
 
 ## 实机检查
 
-对最终 `GoPredator-v1.3.zip` 的精确 SHA-256 测试：
+对最终 `GoPredator-v5.0-preview.zip` 的精确 SHA-256 测试：
 
 1. 干净部署 Loader v15 与 GoPredator，确认 Gosporebrust 已禁用。
 2. 进入银河战争地图，确认 3（寡妇港 / WIDOW'S HARBOR）可以点击。

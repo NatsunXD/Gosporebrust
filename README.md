@@ -11,7 +11,7 @@ GoPredator 使用独立管理器 GUID、独立 Loader 资源名 `mods/natsun/gop
 
 1. 关闭游戏。
 2. 安装并启用 [Bingus Shared Loader v15 或更新版本](https://github.com/CowboyBingus/BingusSharedLoader/releases)。
-3. 在 HDArsenal 或 HD2MM 中导入 `GoPredator-v1.3.zip`。
+3. 在 HDArsenal 或 HD2MM 中导入 `GoPredator-v5.0-preview.zip`。
 4. 启用 GoPredator，Purge 后重新 Deploy，并重启游戏。
 
 本测试包支持 Steam build `24826606`、EXE `1.8.45317.0`。离线测试通过不等于实机验证，精确 ZIP 完成游戏内测试前，`runtime_verified` 保持 `false`。

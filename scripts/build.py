@@ -18,7 +18,7 @@ SOURCE = ROOT / 'src'
 TESTS = ROOT / 'tests'
 RESOURCE = 'mods/natsun/gopredator'
 IMPLEMENTATION_RESOURCE = RESOURCE + '_impl'
-REVISION = 'planet-scope-go-predator-planet-125-v3'
+REVISION = 'planet-scope-gopredator-v5-preview-46015-dynamic-terminid-source'
 GUID = 'eefcedc1-ebd4-4662-91d6-14ed32f8133b'
 
 
@@ -73,9 +73,9 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '3.0', 'guid': GUID,
+        'name': 'GoPredator', 'slug': 'GoPredator', 'version': '5.0-preview', 'guid': GUID,
         'revision': REVISION,
-        'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from neutral planet records. Built for Helldivers 2 1.8.46015.0. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
+        'description': "PREVIEW: Adds Predator Variant definitions 1243 and 1245 to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from a dynamically selected Terminid source planet. Built for Helldivers 2 1.8.46015.0. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
         'deployment_files': files,
         'files': {path: sha((ROOT / path).read_bytes()) for path in files.values()},
@@ -97,11 +97,11 @@ def main():
             'active_planet_mutation': False,
             'active_planet_trigger': 'active_or_hovered_planet_125',
             'task_entry_copy': {
-                'source_planet': None, 'target_planet': 125,
+                'source_planet': 'dynamic_min_visible_terminid', 'target_planet': 125,
                 'table_offset': 1012352, 'row_stride': 92,
                 'planet_field_offset': 16, 'valid_field_offset': 52,
                 'operation_field_offset': 24,
-                'template_policy': 'neutral_planet_only_excludes_268',
+                'template_policy': 'dynamic_terminid_source_sorted_by_planet_id',
             },
             'dynamic_access_mutation': {
                 'planet': 125,
