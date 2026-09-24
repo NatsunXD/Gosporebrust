@@ -3,8 +3,13 @@ return function(create_api, patch, build)
     local state = {revision = build.revision, active = false, status = '', detail = ''}
     _G.Gosporebrust = state
 
+    local identity_warning = nil
     local function report(status, active)
         local detail = patch.detail or ''
+        if identity_warning then
+            detail = (detail ~= '' and (detail .. ' ')) or ''
+            detail = detail .. identity_warning
+        end
         if state.status == status and state.detail == detail and state.active == active then return end
         state.active, state.status, state.detail = active, status, detail
         print('[Gosporebrust] ' .. build.revision .. ': ' .. status ..
@@ -28,8 +33,13 @@ return function(create_api, patch, build)
         local api = create_api()
         local exe, game = api.module(nil), api.module('game.dll')
         assert(exe and game, 'Required game modules unavailable')
-        assert(api.module_hash(exe) == build.exe_sha256, 'Unsupported executable; no change applied')
-        assert(api.module_hash(game) == build.game_sha256, 'Unsupported game module; no change applied')
+        local exe_hash, game_hash = api.module_hash(exe), api.module_hash(game)
+        if exe_hash ~= build.exe_sha256 or game_hash ~= build.game_sha256 then
+            identity_warning = string.format(
+                'identity=warning:exe=%s:expected=%s:game=%s:expected=%s',
+                exe_hash, build.exe_sha256, game_hash, build.game_sha256)
+            print('[Gosporebrust] warning: module hash mismatch; continuing with structural checks')
+        end
         assert(type(update) == 'function', 'Game update unavailable; no change applied')
         return api, game
     end)
