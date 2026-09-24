@@ -13,9 +13,9 @@ LUA_CANDIDATES = [
 ]
 LUA = next((path for path in LUA_CANDIDATES if path and path.is_file()),
            ROOT / 'tools/src/LuaJIT/src/luajit.exe')
-# Steam build 25327279 / EXE 1.8.45850.0.
-EXE_SHA = 'D8E23968D1412B07E06785321727D63EDF74E711214D6F6ADEB3BFCA95CA6827'
-GAME_DLL_SHA = '73374BD4E38386BEB9A23BEF480082B67D457EBC77485FBEC5F488B4E95E201F'
+# Steam build 25480438 / EXE 1.8.46015.0.
+EXE_SHA = 'F5FEE03DCFDB2E553A4752C283590950AC13316B376D8196AA556FF0400D5F06'
+GAME_DLL_SHA = '2E2C3B7C2500646DADD5F2B4C6E0504DBB7E7896139F64CDDC0D1813C718F51E'
 # Arsenal/HD2MM deployable contract: each standalone package ships patch_0;
 # the manager assigns overlay priority during deployment. Independence comes
 # from the archive's resource identities, not from inventing a new filename.

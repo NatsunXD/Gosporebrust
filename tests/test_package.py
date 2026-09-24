@@ -30,8 +30,8 @@ def main():
         }]
         assert provenance['revision'] == 'planet-scope-go-predator-planet-125-v3'
         assert provenance['display_version'] == 'v3.0'
-        assert provenance['steam_build'] == 25327279
-        assert provenance['exe_version'] == '1.8.45850.0'
+        assert provenance['steam_build'] == 25480438
+        assert provenance['exe_version'] == '1.8.46015.0'
         assert provenance['runtime_verified'] is False
         assert provenance['requires'] == [{
             'name': 'Bingus Shared Loader',

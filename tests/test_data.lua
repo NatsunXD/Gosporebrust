@@ -337,6 +337,28 @@ assert(results[1] == 1 and results[2] == nil and results[3] == 3)
 assert(select('#', env.update(0.1, 4)) == 3 and checks == 2)
 pass('loader update preserves nil-containing callback tuples')
 
+local mismatch_calls = 0
+local mismatch_env = setmetatable({print = function() end, os = {getenv = function() end}}, {__index = _G})
+mismatch_env._G = mismatch_env
+mismatch_env.update = function() return 1 end
+local mismatch_chunk = assert(loadfile(source .. '/archive_loader.lua'))
+setfenv(mismatch_chunk, mismatch_env)
+local mismatch_install = mismatch_chunk()
+setfenv(mismatch_install, mismatch_env)
+mismatch_install(function()
+    return {
+        module = function(name) return name and 'game' or 'exe' end,
+        module_hash = function(module) return module == 'game' and 'new-game' or 'new-exe' end,
+    }
+end, {detail = '', apply = function()
+    mismatch_calls = mismatch_calls + 1
+    return true, 'gopredator_ready', true
+end}, {revision = 'mismatch-fixture', exe_sha256 = 'old-exe', game_sha256 = 'old-game'})
+mismatch_env.update(0.2, 1)
+assert(mismatch_calls == 1)
+assert(mismatch_env.GoPredator and mismatch_env.GoPredator.detail:find('identity=warning:', 1, true))
+pass('module hash mismatch warns and still applies the structural checks')
+
 local required, required_count
 local entry_env = setmetatable({require = function(name)
     required, required_count = name, (required_count or 0) + 1

@@ -75,7 +75,7 @@ def main():
     report = {
         'name': 'GoPredator', 'slug': 'GoPredator', 'version': '3.0', 'guid': GUID,
         'revision': REVISION,
-        'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from neutral planet records. Built for Helldivers 2 1.8.45850.0. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
+        'description': "Adds Predator Variant definitions 1243 and 1245 only to Terminid missions on planet 125 (Fenrir III), unlocks planet selection, and prepares local planet 125 task rows from neutral planet records. Built for Helldivers 2 1.8.46015.0. Mutually exclusive with Gosporebrust. Requires Bingus Shared Loader v15 or newer.",
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
         'deployment_files': files,
         'files': {path: sha((ROOT / path).read_bytes()) for path in files.values()},
