@@ -1,6 +1,6 @@
 local ffi
 local patch = {
-    revision = 'planet-scope-v4-planet-127-only',
+    revision = 'planet-scope-v5-preview-46015-dynamic-terminid-source',
     task_mutation_enabled = true,
     modifier_definition_id = 1244,
     removed_modifier_definition_id = 1241,
@@ -48,7 +48,8 @@ local patch = {
     local_row_stride = 92,
     local_row_planet_offset = 16,
     local_row_valid_offset = 52,
-    task_source_planet = 268,
+    task_source_planet = nil,
+    task_source_excluded_planets = {[127] = true},
     task_target_planet = 127,
     active_planet_offset = 1548952,
     hovered_planet_offset = 1548956,
@@ -222,25 +223,34 @@ local function apply_task_fields(api, game, board, fields)
     return applied
 end
 
+local function candidate_source_planets(api, game, groups)
+    local board = ptr(api, game + patch.board_pointer_rva)
+    local campaign = board + patch.campaign_offset
+    local candidates = {}
+    for planet in pairs(groups) do
+        if planet ~= patch.task_target_planet
+            and not (patch.task_source_excluded_planets or {})[planet] then
+            local record = campaign + patch.planet_dynamic_stride * planet
+                + patch.planet_dynamic_offset
+            local bytes = api.read(record + patch.dynamic_faction_offset, 4)
+            local faction = bytes and u32(bytes, 0)
+            if faction == patch.terminid_faction then
+                candidates[#candidates + 1] = planet
+            end
+        end
+    end
+    table.sort(candidates)
+    return candidates
+end
+
 local function capture_task_cache(api, game, board, active)
+    if task_cache.owner and not same_pointer(api, board, task_cache.owner) then
+        task_cache.owner, task_cache.slots = nil, nil
+    end
     local base = board + patch.local_rows_offset
     local size = patch.local_rows_capacity * patch.local_row_stride
     if not api.writable_data(base, size) then return end
     local bytes = assert(api.read(base, size), 'local campaign task rows unavailable')
-
-    local excluded = {[patch.task_target_planet] = true}
-    local owner = ptr(api, game + patch.globals_pointer_rva)
-    local global_bytes = assert(api.read(owner, patch.global_rows * patch.global_row_size),
-        'global modifier table unavailable')
-    for index = 0, patch.global_rows - 1 do
-        local row_base = index * patch.global_row_size
-        local total = u32(global_bytes, row_base + patch.global_total_offset)
-        local scope = global_bytes:byte(row_base + patch.global_scope_offset + 1)
-        local planet = u32(global_bytes, row_base + patch.global_value_offset)
-        if total and total > 0 and scope == 0 and planet then excluded[planet] = true end
-    end
-    -- 268 is intentionally excluded in this variant; only neutral planets
-    -- without a planet-level modifier may provide the task template.
 
     local groups, order = {}, {}
     for index = 0, patch.local_rows_capacity - 1 do
@@ -248,24 +258,19 @@ local function capture_task_cache(api, game, board, active)
             (index + 1) * patch.local_row_stride)
         if task_row_valid(row) then
             local planet = task_row_planet(row)
-            if planet and not excluded[planet] then
+            if planet and planet ~= patch.task_target_planet then
                 if not groups[planet] then groups[planet], order[#order + 1] = {}, planet end
                 groups[planet][#groups[planet] + 1] = row
             end
         end
     end
 
-    local source = groups[patch.task_source_planet] and patch.task_source_planet or nil
-    if not source and not task_cache.rows then
-        for _, planet in ipairs(order) do
-            if planet ~= patch.task_target_planet and not excluded[planet] then
-                source = planet
-                break
-            end
-        end
-    end
-    if source and #groups[source] > 0 then
-        task_cache.rows, task_cache.owner, task_cache.source_planet = groups[source], board, source
+    local candidates = candidate_source_planets(api, game, groups)
+    if #candidates == 0 then return end
+    local source = candidates[1]
+    if #groups[source] > 0 then
+        task_cache.rows, task_cache.owner = groups[source], board
+        task_cache.source_planet, task_cache.candidates = source, candidates
     end
 end
 
@@ -283,7 +288,7 @@ local function ensure_task_rows(api, game)
             (index + 1) * patch.local_row_stride)
         if task_row_valid(row) then
             local planet = task_row_planet(row)
-            if planet == patch.task_source_planet then
+            if planet == task_cache.source_planet then
                 valid_268[#valid_268 + 1] = row
                 valid_268_slots[#valid_268_slots + 1] = index
             elseif planet == patch.task_target_planet then
@@ -294,9 +299,9 @@ local function ensure_task_rows(api, game)
         end
     end
     local templates = task_cache.rows
-    local source_label = task_cache.source_planet and ('neutral_' .. tostring(task_cache.source_planet)) or 'neutral'
+    local source_label = task_cache.source_planet and ('terminid_' .. tostring(task_cache.source_planet)) or 'terminid'
     if not templates or #templates == 0 then
-        return {}, 'task_rows=no_neutral_template', false
+        return {}, 'task_rows=no_terminid_template', false
     end
     if not task_cache.rows then task_cache.rows = templates end
     local active_field
@@ -552,6 +557,10 @@ local function ensure_all_planets(api, game, owner, tag_id)
     end
     if #fields > 0 then assert(apply_fields(api, game, owner, fields)) end
     return #fields > 0, table.concat(actions, ',')
+end
+
+function patch.reset_task_cache()
+    task_cache = {rows = nil, slots = nil, owner = nil, applied = nil}
 end
 
 function patch.apply(api, game)

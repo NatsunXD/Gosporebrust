@@ -6,7 +6,7 @@ Gosporebrust v2.4 恢复测试版
 
 安装：
 1. 完全关闭游戏。
-2. 在 HDArsenal 或 HD2MM 中导入 Gosporebrust-v2.4.zip。
+2. 在 HDArsenal 或 HD2MM 中导入 Gosporebrust-v5.0-preview.zip。
 3. 确认 Bingus Shared Loader v15 或更新版本已经安装并启用。
 4. 启用 Gosporebrust，执行 Purge（清除部署）后重新 Deploy（部署）。
 5. 重新启动游戏。
@@ -24,7 +24,7 @@ Gosporebrust v2.4 恢复测试版
 日志：
 优先查看 %LOCALAPPDATA%\CowboyBingus\Helldivers2\Logs\Gosporebrust.log。
 若 Loader 未提供共享日志目录，则查看 %LOCALAPPDATA%\Gosporebrust.log。
-日志出现 planet-scope-v2.4-safe-no-task-mutation 与 gosporebrust_applied/gosporebrust_ready 表示词条/阵营数据已写入或已存在；detail 应出现 `task_rows=disabled`。这仍需要先确认 268 任务列表恢复，再进行后续测试。
+日志出现 planet-scope-v5-preview-46015-dynamic-terminid-source 与 gosporebrust_applied/gosporebrust_ready 表示词条/阵营数据已写入或已存在；detail 应出现 `task_rows=disabled`。这仍需要先确认 268 任务列表恢复，再进行后续测试。
 
 卸载：
 完全关闭游戏，禁用或删除 Gosporebrust，执行 Purge 后重新部署其余模组。不要在游戏进程仍运行时热卸载。

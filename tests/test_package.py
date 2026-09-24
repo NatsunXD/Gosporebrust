@@ -22,16 +22,16 @@ def main():
         provenance = json.loads(payloads['Gosporebrust-manifest.json'])
         assert manager['Version'] == 1
         assert manager['Guid'] == '9f9ebd1d-bd31-4a8d-89f7-4d7f1b7e4f24'
-        assert manager['Name'] == 'Gosporebrust - v4.0'
+        assert manager['Name'] == 'Gosporebrust - v5.0-preview'
         assert manager['Options'] == [{
-            'Name': 'Gosporebrust - v4.0',
+            'Name': 'Gosporebrust - v5.0-preview',
             'Description': manager['Description'],
             'Include': ['data'],
         }]
-        assert provenance['revision'] == 'planet-scope-v4-planet-127-only'
-        assert provenance['display_version'] == 'v4.0'
-        assert provenance['steam_build'] == 25327279
-        assert provenance['exe_version'] == '1.8.45850.0'
+        assert provenance['revision'] == 'planet-scope-v5-preview-46015-dynamic-terminid-source'
+        assert provenance['display_version'] == 'v5.0-preview'
+        assert provenance['steam_build'] == 25480438
+        assert provenance['exe_version'] == '1.8.46015.0'
         assert provenance['runtime_verified'] is False
         assert provenance['requires'] == [{
             'name': 'Bingus Shared Loader',
@@ -57,15 +57,15 @@ def main():
         assert change['executable_code_writes'] == 0
         assert change['queue_or_population_counter_writes'] is False
         assert change['planet_availability_mutation'] is True
-        assert change['task_entry_mutation'] is False
+        assert change['task_entry_mutation'] is True
         assert change['active_planet_mutation'] is False
         assert change['active_planet_trigger'] is None
-        assert change['task_entry_copy']['template_policy'] == 'neutral_planet_only_excludes_268'
+        assert change['task_entry_copy']['template_policy'] == 'dynamic_terminid_source_sorted_by_planet_id'
         assert change['task_entry_copy'] == {
-            'source_planet': None, 'target_planet': 127, 'table_offset': 1012352,
+            'source_planet': 'dynamic_min_visible_terminid', 'target_planet': 127, 'table_offset': 1012352,
             'row_stride': 92, 'planet_field_offset': 16, 'valid_field_offset': 52,
             'operation_field_offset': 24,
-            'template_policy': 'neutral_planet_only_excludes_268',
+            'template_policy': 'dynamic_terminid_source_sorted_by_planet_id',
         }
         assert change['dynamic_faction_mutation'] == {
             'planet': 127, 'before': 1, 'after': 2,

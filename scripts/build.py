@@ -18,7 +18,7 @@ SOURCE = ROOT / 'src'
 TESTS = ROOT / 'tests'
 RESOURCE = 'mods/natsun/gosporebrust'
 IMPLEMENTATION_RESOURCE = RESOURCE + '_impl'
-REVISION = 'planet-scope-v4-planet-127-only'
+REVISION = 'planet-scope-v5-preview-46015-dynamic-terminid-source'
 GUID = '9f9ebd1d-bd31-4a8d-89f7-4d7f1b7e4f24'
 
 
@@ -73,9 +73,9 @@ def main():
     files = {f'data/{ARCHIVE}{suffix}': f'build/{REVISION}/data/{ARCHIVE}{suffix}'
              for suffix in ('', '.stream', '.gpu_resources')}
     report = {
-        'name': 'Gosporebrust', 'slug': 'Gosporebrust', 'version': '4.0', 'guid': GUID,
+        'name': 'Gosporebrust', 'slug': 'Gosporebrust', 'version': '5.0-preview', 'guid': GUID,
         'revision': REVISION,
-        'description': 'Adds the Spore Burst enemy modifier (planet entry 1244) only to Terminid missions on planet 127, removes modifier 1241 from planet 127, and prepares local 127 task rows from neutral planet records. Built for Helldivers 2 1.8.45850.0. Requires Bingus Shared Loader v15 or newer.',
+        'description': 'PREVIEW: Adds the Spore Burst enemy modifier (planet entry 1244) to Terminid missions on planet 127, removes modifier 1241 from planet 127, and prepares local 127 task rows from a dynamically selected Terminid source planet. Built for Helldivers 2 1.8.46015.0. Requires Bingus Shared Loader v15 or newer.',
         'game_exe_sha256': EXE_SHA, 'game_dll_sha256': GAME_DLL_SHA,
         'deployment_files': files,
         'files': {path: sha((ROOT / path).read_bytes()) for path in files.values()},
@@ -92,15 +92,15 @@ def main():
             'queue_or_population_counter_writes': False, 'runtime_verified': False,
             'planet_availability_mutation': True,
             'planet_availability_scope': 'planet 127 dynamic record access fields only',
-            'task_entry_mutation': False,
+            'task_entry_mutation': True,
             'active_planet_mutation': False,
             'active_planet_trigger': None,
             'task_entry_copy': {
-                'source_planet': None, 'target_planet': 127,
+                'source_planet': 'dynamic_min_visible_terminid', 'target_planet': 127,
                 'table_offset': 1012352, 'row_stride': 92,
                 'planet_field_offset': 16, 'valid_field_offset': 52,
                 'operation_field_offset': 24,
-                'template_policy': 'neutral_planet_only_excludes_268',
+                'template_policy': 'dynamic_terminid_source_sorted_by_planet_id',
             },
             'dynamic_access_mutation': {
                 'planet': 127, 'state_offset': 28, 'state_before': 17, 'state_intermediate': 9, 'state_after': 5,

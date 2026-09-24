@@ -22,12 +22,13 @@ def package_release(root: Path, build: Path, report: dict) -> Path:
             raise ValueError('Build output changed before packaging: ' + source)
         files[destination] = data
     slug = report['slug']
-    version = 'v' + str(report.get('version') or report['revision']).rsplit('v', 1)[-1]
+    version_value = str(report.get('version') or report['revision'])
+    version = version_value if version_value.startswith('v') else 'v' + version_value
     display_name = report['name'] + ' - ' + version
     files[slug + '-README.txt'] = (root / 'INSTALL.txt').read_bytes()
     provenance = {
         'name': report['name'], 'revision': report['revision'], 'display_version': version,
-        'steam_build': 25327279, 'exe_version': '1.8.45850.0',
+        'steam_build': 25480438, 'exe_version': '1.8.46015.0',
         'game_exe_sha256': report['game_exe_sha256'],
         'game_dll_sha256': report['game_dll_sha256'],
         'runtime_verified': False,
